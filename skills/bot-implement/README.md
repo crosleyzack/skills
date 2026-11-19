@@ -9,7 +9,7 @@ The agent does the rest without you.
 3. **Issue**: the agent writes the plan to an `Agent notes` section in the issue description.
 4. **Implement**: the agent creates the branch from the issue in a new worktree, and follows `/implement`.
 5. **PR**: the agent pushes the branch and opens the PR.
-6. **Review loop**: each round, a new subagent runs a `golang-deslop` review, and the agent reads the PR review comments.
+6. **Review loop**: each round, the agent reads the failed checks, a new subagent runs a `golang-deslop` review, and the agent reads the PR review comments.
    The agent fixes the findings it accepts, replies to each comment, and resolves the threads it fixed.
    The loop stops when a round has no findings, or after the maximum number of rounds (5 by default).
 
@@ -20,7 +20,7 @@ flowchart TD
     C --> D[Create branch in a new worktree and implement]
     D --> E[Push and open PR]
     E --> W[Wait for checks and review bots]
-    W --> F[golang-deslop subagent review + read PR review items]
+    W --> F[Read failed checks + golang-deslop subagent review + read PR review items]
     F --> G{Findings or review items?}
     G -- no --> R[Report]
     G -- yes --> H[Accept or decline each one]

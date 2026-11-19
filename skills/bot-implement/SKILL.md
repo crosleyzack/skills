@@ -106,7 +106,9 @@ Keep a **decline list**: each finding you decline, with its reason.
 Each round:
 
 1. Wait for the checks and the review bots: `gh pr checks <pr> --watch`.
-   Continue if a check fails or the PR has no checks.
+   Each failed check is a finding.
+   Read its log, with `gh run view <run-id> --log-failed` for GitHub Actions, or from the link of the check.
+   Continue if the PR has no checks.
 2. Spawn a new `general-purpose` subagent for the deslop review.
    Skip this step if the diff has no Go files.
    A new subagent each round reviews the code without your bias.
@@ -133,9 +135,11 @@ Each round:
        reviewThreads(first:100){nodes{id isResolved path line comments(first:50){nodes{author{login} body createdAt}}}}}}}'
    ```
 
-4. Evaluate each deslop finding and review item.
+4. Evaluate each failed check, deslop finding, and review item.
+   Skip the failed checks that are on the decline list.
    Accept it when it fixes a defect, follows golang-deslop, or matches the step 3 plan.
    Decline it when it is wrong, conflicts with a step 3 decision, or is out of scope, and add it to the decline list.
+   Decline a failed check only when this PR did not cause it, for example when it also fails on the default branch.
 5. Apply the accepted fixes.
    Run the full test suite.
    Commit and push once for the round.
@@ -149,7 +153,7 @@ Each round:
 7. Resolve each thread that you fixed, with the `resolveReviewThread` mutation.
    Keep declined threads open, so the reviewer makes the decision.
 
-Done when a round has no deslop findings and no review items.
+Done when a round has no deslop findings, no review items, and no failed checks other than those on the decline list.
 After the maximum number of rounds, go to step 7, even if findings or review items remain.
 
 ## 7. Report
