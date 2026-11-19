@@ -50,7 +50,16 @@ Done when the issue shows the new section, or the tracker file sends the notes t
 
 ## 4. Implement
 
-Create the branch from the latest default branch, in a new worktree:
+If the repo has an `upstream` remote, update the default branch on `origin` from `upstream` first:
+
+```sh
+git fetch upstream
+git push origin upstream/<default-branch>:refs/heads/<default-branch>
+```
+
+If the push fails because `origin` has commits that `upstream` does not have, stop and ask the user.
+
+Create the branch from the latest default branch on `origin`, in a new worktree:
 
 ```sh
 git fetch origin
