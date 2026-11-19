@@ -11,7 +11,7 @@ The agent does the rest without you.
 5. **PR**: the agent pushes the branch and opens the PR.
 6. **Review loop**: each round, a new subagent runs a `golang-deslop` review, and the agent reads the PR review comments.
    The agent fixes the findings it accepts, replies to each comment, and resolves the threads it fixed.
-   The loop stops when a round has no findings, or after 5 rounds.
+   The loop stops when a round has no findings, or after the maximum number of rounds (5 by default).
 
 ```mermaid
 flowchart TD
@@ -26,7 +26,7 @@ flowchart TD
     G -- yes --> H[Accept or decline each one]
     H --> I[Fix, test, commit, push]
     I --> J[Reply with 🤖 and resolve fixed threads]
-    J --> K{5 rounds done?}
+    J --> K{Max rounds done?}
     K -- no --> W
     K -- yes --> R
 ```
@@ -34,6 +34,7 @@ flowchart TD
 ## Usage
 
 Type `/bot-implement ENG-123` in Claude Code, from the repo that the issue changes.
+Add `--rounds <n>` to change the maximum number of review rounds, for example `/bot-implement ENG-123 --rounds 3`.
 
 ## Requirements
 

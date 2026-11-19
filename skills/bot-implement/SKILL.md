@@ -2,9 +2,15 @@
 name: bot-implement
 description: "Take an issue link through a grilled plan to an open PR, then loop on golang-deslop and PR review comments until both are clean."
 disable-model-invocation: true
+argument-hint: "<issue> [--rounds <n>]"
 ---
 
-Input: `$ARGUMENTS`, an issue URL or ID from GitHub, Linear, or another tracker.
+Input: `$ARGUMENTS`: an issue URL or ID from GitHub, Linear, or another tracker, then optional flags:
+
+- `--rounds <n>`: the maximum number of review rounds in step 6.
+  Default: 5.
+
+If an argument does not match, or `<n>` is not a positive integer, stop and ask the user.
 
 Do the steps in order.
 Steps 1 to 3 need the user.
@@ -129,7 +135,7 @@ Each round:
    Keep declined threads open, so the reviewer makes the decision.
 
 Done when a round has no deslop findings and no review items.
-Stop after 5 rounds, even if findings remain.
+After the maximum number of rounds, exit the loop and go to step 7, even if findings or review items remain.
 
 ## 7. Report
 
