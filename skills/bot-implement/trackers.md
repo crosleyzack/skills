@@ -2,6 +2,7 @@
 
 How to do each **tracker operation** for each tracker.
 Use only the section for the tracker of the issue.
+If you cannot tell which tracker the issue is from, ask the user.
 
 The operations:
 
@@ -62,11 +63,11 @@ Match: a `github.com/<owner>/<repo>/issues/<n>` URL, or `#<n>` for the current r
 
 Find a tool that can read the issue: search with ToolSearch for the tracker name, or use `WebFetch` for a public URL.
 
-- **Read**: read everything that the tool can get from the list in the operations.
+- **Read**: get all that the tool can get from the Read operation.
 - **Branch**: `<issue-id>-<title in kebab-case>`, cut to 60 characters.
 - **Write**: edit the description if the tool can.
   If it cannot, add the notes as a comment.
-  If the tool cannot write, give the notes to the user, and tell the user to add them.
+  If the tool cannot write, give the notes to the user to add.
 - **Link**: put the issue URL in the Notes section of the PR body.
 
 If no tool can read the issue, stop and ask the user for the issue content.
