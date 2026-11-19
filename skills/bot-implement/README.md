@@ -41,5 +41,7 @@ Add `--rounds <n>` to change the maximum number of review rounds, for example `/
 - A tool that can read the issue: `gh` for GitHub, the Linear MCP server for Linear, or another MCP server.
   [`trackers.md`](trackers.md) has the commands for each tracker.
 - `gh`, authenticated for the repo.
-- The `mattpocock-skills` and `golang-deslop` skills.
+- The `mattpocock-skills` and [`golang-deslop`](../golang-deslop/README.md) skills.
   `grill-with-docs` and `implement` are user-invoked, so this skill calls `grilling` and `domain-modeling` directly, and reads the `implement` file at `~/.claude/skills/mattpocock-skills/skills/engineering/implement/SKILL.md`.
+- Optional: a `gh-review-thread` command with `list`, `reply`, and `resolve` operations.
+  The skill uses it for review threads when it exists, for machines where a permission hook stops `gh api graphql`.

@@ -42,7 +42,8 @@ Match: a `github.com/<owner>/<repo>/issues/<n>` URL, or `#<n>` for the current r
 - **Read**: `gh issue view <url> --json number,title,body,comments,labels,milestone,url`.
   Read sub-issues and the parent issue with `gh api repos/<owner>/<repo>/issues/<n>/sub_issues` and `gh api repos/<owner>/<repo>/issues/<n>/parent`.
   Read the issues and PRs that the body and the comments link, with `gh`.
-  Download images with `gh api` or `curl -H "Authorization: token $(gh auth token)"` into a new temp directory, then view them with Read.
+  View images with `WebFetch`.
+  Name each image that you cannot read in the context summary.
 - **Branch**: `<n>-<title in kebab-case>`, cut to 60 characters.
 - **Write**: `gh issue edit <url> --body-file <file>`.
   Use a `<details>` section:
