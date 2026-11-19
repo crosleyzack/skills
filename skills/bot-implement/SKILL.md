@@ -65,13 +65,15 @@ Done when `get_issue` shows the new section.
 
 ## 4. Implement
 
-If the working tree is not clean, stop and ask the user.
-Create the branch from the latest default branch:
+Create the branch from the latest default branch, in a new worktree:
 
 ```sh
 git fetch origin
-git switch -c <gitBranchName> origin/<default-branch>
+git worktree add -b <gitBranchName> .claude/worktrees/<issue-id> origin/<default-branch>
 ```
+
+Call `EnterWorktree` with `path: .claude/worktrees/<issue-id>`.
+Do all the work from here to step 7 in the worktree.
 
 `implement` is user-invoked too.
 Read `~/.claude/skills/mattpocock-skills/skills/engineering/implement/SKILL.md` and follow it, with the step 3 plan as the spec.
