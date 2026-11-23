@@ -117,9 +117,9 @@ Keep the PR URL for step 6.
 
 ## 6. Review loop
 
-Call the Skill tool for `bot-review` with `<pr-url> --rounds <n>`.
-It loops on failed checks, `slop-review`, and PR review comments until the PR is green, or until the maximum number of rounds.
-It works in the current worktree, because the PR branch is checked out there.
+Call the Skill tool for `bot-review` with `<pr-url> --rounds <n>`, with the PR URL from step 5.
+It starts a reviewer subagent that loops on failed checks, `slop-review`, and PR review comments until the PR is green, or until the maximum number of rounds.
+The reviewer works in the current worktree, because the PR branch is checked out there.
 
 Done when `bot-review` gives its report.
 
