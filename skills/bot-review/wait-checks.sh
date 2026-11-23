@@ -12,6 +12,9 @@ usage() {
 repo="${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
 sha="${2:-$(git rev-parse HEAD)}"
 register_seconds="${WAIT_CHECKS_REGISTER_SECONDS:-180}"
+# A foreground command stops after 10 minutes, and a subagent runs the script in the foreground.
+# 480 keeps 2 minutes for the last sleep and the last gh calls.
+max_seconds="${WAIT_CHECKS_MAX_SECONDS:-480}"
 
 # Immediately after a push, GitHub has no checks for the new commit.
 # Without this wait, `gh pr checks` reports the old commit or no checks.
@@ -43,8 +46,17 @@ until [[ $(gh pr view "$1" --json headRefOid --jq .headRefOid 2>/dev/null) == "$
 done
 sleep 15
 
-# The exit code of the watch does not separate a failed check from a gh error.
-gh pr checks "$1" --watch --interval 30 >/dev/null 2>&1 || true
+# After 3 consecutive gh errors, stop the wait: the gh call below then fails and shows the error.
+errors=0
+while ((SECONDS < max_seconds)); do
+  if pending=$(gh pr checks "$1" --json bucket --jq 'any(.[]; .bucket == "pending")' 2>/dev/null); then
+    [[ $pending == false ]] && break
+    errors=0
+  elif ((++errors >= 3)); then
+    break
+  fi
+  sleep 30
+done
 
 checks=$(gh pr checks "$1" --json name,bucket,link)
 result=$(jq -r '

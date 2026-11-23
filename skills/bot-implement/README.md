@@ -9,8 +9,8 @@ The agent does the rest without you.
 3. **Issue**: the agent writes the plan to an `Agent notes` section in the issue description.
 4. **Implement**: the agent creates the branch from the issue in a new worktree, and follows `/implement`.
 5. **PR**: the agent pushes the branch and opens the PR.
-6. **Review loop**: the agent calls [`bot-review`](../bot-review/README.md).
-   Each round, it fixes failed checks, runs `/slop-review`, and answers the PR review comments.
+6. **Review loop**: the agent calls [`bot-review`](../bot-review/README.md) with the PR, and `bot-review` starts a reviewer subagent for it.
+   Each round, the reviewer fixes failed checks, runs `/slop-review`, and answers the PR review comments.
    The loop stops when the PR is green, or after the maximum number of rounds (5 by default).
 
 ```mermaid
