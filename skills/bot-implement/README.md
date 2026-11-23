@@ -9,9 +9,9 @@ The agent does the rest without you.
 3. **Issue**: the agent writes the plan to an `Agent notes` section in the issue description.
 4. **Implement**: the agent creates the branch from the issue in a new worktree, and follows `/implement`.
 5. **PR**: the agent pushes the branch and opens the PR.
-6. **Review loop**: each round, the agent reads the failed checks, a new subagent runs a `golang-deslop` review, and the agent reads the PR review comments.
-   The agent fixes the findings it accepts, replies to each comment, and resolves the threads it fixed.
-   The loop stops when a round has no findings, or after the maximum number of rounds (5 by default).
+6. **Review loop**: the agent calls [`bot-review`](../bot-review/README.md).
+   Each round, it fixes failed checks, runs `/slop-review`, and answers the PR review comments.
+   The loop stops when the PR is green, or after the maximum number of rounds (5 by default).
 
 ```mermaid
 flowchart TD
@@ -19,16 +19,8 @@ flowchart TD
     B --> C[Write Agent notes to the issue]
     C --> D[Create branch in a new worktree and implement]
     D --> E[Push and open PR]
-    E --> W[Wait for checks and review bots]
-    W --> F[Read failed checks + golang-deslop subagent review + read PR review items]
-    F --> G{Findings or review items?}
-    G -- no --> R[Report]
-    G -- yes --> H[Accept or decline each one]
-    H --> I[Fix, test, commit, push]
-    I --> J[Reply with 🤖 and resolve fixed threads]
-    J --> K{Max rounds done?}
-    K -- no --> W
-    K -- yes --> R
+    E --> V[bot-review: loop on checks, /slop-review, and comments]
+    V --> R[Report]
 ```
 
 ## Usage
@@ -41,7 +33,5 @@ Add `--rounds <n>` to change the maximum number of review rounds, for example `/
 - A tool that can read the issue: `gh` for GitHub, the Linear MCP server for Linear, or another MCP server.
   [`trackers.md`](trackers.md) has the commands for each tracker.
 - `gh`, authenticated for the repo.
-- The `mattpocock-skills` and [`golang-deslop`](../golang-deslop/README.md) skills.
+- The `mattpocock-skills` and [`bot-review`](../bot-review/README.md) skills, and the requirements of `bot-review`.
   `grill-with-docs` and `implement` are user-invoked, so this skill calls `grilling` and `domain-modeling` directly, and reads the `implement` file at `~/.claude/skills/mattpocock-skills/skills/engineering/implement/SKILL.md`.
-- Optional: a `gh-review-thread` command with `list`, `reply`, and `resolve` operations.
-  The skill uses it for review threads when it exists, for machines where a permission hook stops `gh api graphql`.
