@@ -89,19 +89,20 @@ if err != nil {
 
 - Commit messages: a short imperative subject line (under ~72 chars). Add a body only when the *why* isn't obvious, and keep it to a few lines.
 - PR descriptions: a few sentences or bullets on what changed and why. Add testing notes only if they're non-obvious.
-- Get straight to the point. No filler ("This PR aims to..."), no restating the diff file by file, no marketing tone, no empty template sections.
+- Get straight to the point. No filler ("This PR aims to..."), no restating the diff file by file, no marketing tone, no template sections that nobody requires.
 - Keep any required attribution or trailer lines.
+- These rules limit length, not format. When the repo, the user, or another skill requires a format (conventional commits, an issue ID, fixed PR sections), use that format and keep each part short.
 
 ```text
 # Bad
-Refactor the user service to improve code quality and maintainability
+refactor(user): refactor the user service to improve code quality and maintainability
 
 This commit refactors the user service. It updates the GetUser function
 to use the new cache, adds error handling, updates the tests, and
 improves overall readability of the code.
 
 # Good
-Cache user lookups in GetUser
+perf(user): cache lookups in GetUser
 
 Profile page was hitting the DB on every render.
 ```

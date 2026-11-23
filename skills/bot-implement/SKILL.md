@@ -41,6 +41,9 @@ The Skill tool cannot call `grill-with-docs`.
 Do what it does: call the Skill tool for `grilling`, then for `domain-modeling`.
 Use the context summary as the plan to grill.
 
+If the issue has an `Agent notes` section from an earlier run, show it to the user and ask if it is still the plan.
+If it is, do not grill again, and skip step 3.
+
 The plan must settle:
 
 - The approach, and each decision with its reason.
@@ -59,24 +62,21 @@ Done when the write operation is complete.
 
 ## 4. Implement
 
-If the repo has an `upstream` remote, update the default branch on `origin` from `upstream` first:
+Create the branch from the latest default branch, in a new worktree.
+The `<base-remote>` is `upstream` if the repo has that remote, and `origin` if not.
 
 ```sh
-git fetch upstream
-git push origin upstream/<default-branch>:refs/heads/<default-branch>
+git fetch <base-remote>
+git worktree add --no-track -b <branch> .claude/worktrees/<issue-id> <base-remote>/<default-branch>
 ```
 
-If the push fails, stop and ask the user.
-
-Create the branch from the latest default branch on `origin`, in a new worktree:
-
-```sh
-git fetch origin
-git worktree add -b <branch> .claude/worktrees/<issue-id> origin/<default-branch>
-```
-
+`--no-track` stops the branch from tracking the default branch, because step 5 pushes it to `origin`.
 `<issue-id>` has only letters, digits, and `-`.
-If the worktree exists from an earlier run, use it and continue from its state.
+
+An earlier run can leave a worktree or a branch:
+
+- If the worktree exists, use it and continue from its state.
+- If the branch exists and has no worktree, use the branch: replace `--no-track -b <branch>` and the start point with `<branch>`.
 
 Call `EnterWorktree` with `path: .claude/worktrees/<issue-id>`.
 Do all the work from here to step 7 in the worktree.
@@ -98,6 +98,7 @@ gh pr create --fill-first --body-file <file>
 The body has three sections: What, Why, and Notes.
 Do the link operation.
 If the repo has an `upstream` remote, open the PR against it: add `--repo <upstream owner>/<repo> --head <origin owner>:<branch>`.
+If the branch has an open PR from an earlier run, do not create a PR: push, and use that PR.
 Keep the PR URL for step 6.
 
 ## 6. Review loop
