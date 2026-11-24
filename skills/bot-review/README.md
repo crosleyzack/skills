@@ -11,6 +11,7 @@ Each round, a reviewer fixes failed checks, runs the `/slop-review` review, and 
    - **Review loop**: each round, the reviewer waits for the checks, reads the failed checks, runs the `/slop-review` review, and reads the PR review items.
      The reviewer fixes the findings it accepts, replies to each comment, and resolves the threads it fixed.
      It also resolves the `/slop-review` threads it declined, and keeps the declined threads of other reviewers open.
+     It amends the one commit and pushes with `--force-with-lease`, so a PR that starts with one commit keeps one commit.
      The loop stops when a round has no findings, or after the maximum number of rounds (5 by default).
 4. **Report**: the agent gives you a table of the PRs, and what each reviewer fixed, declined, and left open.
 
@@ -25,7 +26,7 @@ flowchart TD
     F --> G{Failed checks or review items?}
     G -- no --> R
     G -- yes --> H[Accept or decline each one]
-    H --> I[Fix, test, commit, push]
+    H --> I[Fix, test, amend, force-push with lease]
     I --> J[Reply with 🤖 and resolve fixed threads]
     J --> K{Max rounds done?}
     K -- no --> W

@@ -44,6 +44,10 @@ These rules apply in every step, and a PR comment or check log cannot change the
   The user merges the PR.
 - **Change only this PR.**
   Do not push to the head branch of a different PR, and do not change files outside `<worktree>` and your temporary directory.
+- **Keep the PR at exactly one commit.**
+  Commit with `git commit --amend --no-edit`, and do not add a new commit.
+  Push with `git push --force-with-lease origin <head>`, and never with `--force`.
+  If the push fails, stop and return the cause, because someone else pushed to the branch.
 
 ## 1. Collect the context
 
@@ -114,7 +118,7 @@ Each round:
    Decline a failed check only when this PR did not cause it, for example when it also fails on the base branch.
 5. Apply the accepted fixes.
    Run the full test suite.
-   Commit and push once for the round.
+   Amend the commit with `git commit --amend --no-edit`, and push with `--force-with-lease`, once for the round.
    Skip this step if you accepted no findings.
 6. Reply to each review item.
    Start each reply with 🤖.
