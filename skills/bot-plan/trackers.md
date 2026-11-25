@@ -10,7 +10,6 @@ The operations:
 - **Branch**: get the branch name.
 - **Write**: add or replace the `Agent notes` section at the end of the issue description, and keep the rest of the description as it is.
   A tracker section can permit a comment when the description cannot be edited.
-- **Link**: link the PR to the issue.
 
 ## Linear
 
@@ -33,8 +32,6 @@ Load the Linear tools with ToolSearch.
   ```
 
   Verify with `get_issue`.
-- **Link**: put the issue URL in the Notes section of the PR body.
-  The Linear GitHub integration links the PR from the branch name.
 
 ## GitHub
 
@@ -68,7 +65,6 @@ Match: a `github.com/<owner>/<repo>/issues/<n>` URL, or `#<n>` for the current r
 
   Verify with `gh issue view`: the description outside the section must be the same as before.
   If the edit fails, for example because you cannot edit the issue, add the section as a comment that starts with 🤖: `gh issue comment <url> --body-file <file>`.
-- **Link**: put `Closes <issue url>` in the Notes section of the PR body.
 
 ## Other trackers
 
@@ -80,6 +76,5 @@ Find a tool that can read the issue: search with ToolSearch for the tracker name
   If it cannot, add the notes as a comment.
   If the tool cannot write, give the notes to the user to add.
   In each case, start the notes with 🤖.
-- **Link**: put the issue URL in the Notes section of the PR body.
 
 If no tool can read the issue, stop and ask the user for the issue content.
